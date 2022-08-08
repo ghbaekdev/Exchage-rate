@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { data } from './EXCHANGE_DATA';
+// import { data } from './EXCHANGE_DATA';
 
 const selectList = [
   { title: '한국(KRW)', name: 'USDKRW' },
@@ -9,7 +9,7 @@ const selectList = [
 ];
 
 const Main = () => {
-  const [exchage, setExchage] = useState(data);
+  const [exchage, setExchage] = useState();
   const [selected, setSelected] = useState();
   const [inputValue, setInputValue] = useState();
   const [calculator, setCalculator] = useState();
@@ -32,18 +32,18 @@ const Main = () => {
   const start_date = dateStr;
   const end_date = dateStr;
 
-  // useEffect(() => {
-  //   // fetch(
-  //   //   `https://api.apilayer.com/currency_data/change?start_date=${start_date}&end_date=${end_date}`,
-  //   //   requestOptions
-  //   // )
-  //   fetch(`/data/EXCHANGE_DATA.json`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setExchage(result);
-  //     })
-  //     .catch((error) => console.log('error', error));
-  // }, []);
+  useEffect(() => {
+    fetch(
+      `https://api.apilayer.com/currency_data/change?start_date=${start_date}&end_date=${end_date}`,
+      requestOptions
+    )
+      // fetch(`/data/EXCHANGE_DATA.json`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setExchage(result);
+      })
+      .catch((error) => console.log('error', error));
+  }, []);
 
   const handleSelect = (e) => {
     setSelected(e.target.value);
@@ -53,12 +53,22 @@ const Main = () => {
 
   let rate = quote.USDKRW;
 
+  let unit;
+
+  let totalUnit;
+
   if (selected === 'USDKRW') {
     rate = quote.USDKRW;
+    unit = 'KRW/USD';
+    totalUnit = 'KRW';
   } else if (selected === 'USDJPY') {
     rate = quote.USDJPY;
+    unit = 'JPY/USD';
+    totalUnit = 'JPY';
   } else if (selected === 'USDPHP') {
     rate = quote.USDPHP;
+    unit = 'PHP/USD';
+    totalUnit = 'PHP';
   }
 
   const handleInput = (e) => {
@@ -67,7 +77,11 @@ const Main = () => {
   };
 
   const calculate = () => {
-    setCalculator(rate * inputValue);
+    if ((inputValue < 0) | (inputValue >= 10000)) {
+      alert('송금액이 바르지 않습니다');
+    } else {
+      setCalculator(rate * inputValue);
+    }
   };
 
   return (
@@ -87,6 +101,7 @@ const Main = () => {
         </select>
         <div>
           환율: {rate.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          {`  ${unit}`}
         </div>
         <div>
           송금액: <input onChange={handleInput} type="number" /> USD
@@ -94,8 +109,11 @@ const Main = () => {
         <button onClick={calculate}>Submit</button>
         {calculator > 0 && (
           <div>
-            수취금액은{' '}
-            {calculator.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            수취금액은
+            {calculator.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}{' '}
+            {`  ${totalUnit}`}
             입니다.
           </div>
         )}
