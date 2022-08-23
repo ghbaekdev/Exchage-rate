@@ -1,4 +1,4 @@
-export const data = {
+export const EXCHANGE_DATA = {
   success: true,
   terms: 'https://currencylayer.com/terms',
   privacy: 'https://currencylayer.com/privacy',

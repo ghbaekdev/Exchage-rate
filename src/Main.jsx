@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ExchangeCalculator from './components/ExchangeCalculator';
-import { data } from './EXCHANGE_DATA';
+import { EXCHANGE_DATA } from './EXCHANGE_DATA';
 
 const selectList = [
   { title: '한국(KRW)', name: 'USDKRW' },
@@ -10,7 +10,7 @@ const selectList = [
 ];
 
 const Main = () => {
-  const [exchage, setExchage] = useState(data);
+  const [exchange, setExchage] = useState(EXCHANGE_DATA);
   const [selected, setSelected] = useState();
   const [inputValue, setInputValue] = useState();
   const [calculate, setCalculate] = useState();
@@ -50,7 +50,7 @@ const Main = () => {
     setSelected(e.target.value);
   };
 
-  let quote = exchage.quotes;
+  let quote = exchange.quotes;
 
   let rate = quote.USDKRW;
 
@@ -119,7 +119,7 @@ const Main = () => {
           </div>
         )}
       </ExchageForm>
-      <ExchangeCalculator />
+      <ExchangeCalculator exchange={exchange} />
     </ExchageWrap>
   );
 };

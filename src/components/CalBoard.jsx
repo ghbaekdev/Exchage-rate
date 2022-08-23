@@ -1,33 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 
-const name = [
-  {
-    name: 'USD',
-    id: 1,
-  },
-  {
-    name: 'KRW',
-    id: 2,
-  },
-  {
-    name: 'JPY',
-    id: 3,
-  },
-  {
-    name: 'CNY',
-    id: 4,
-  },
-  {
-    name: 'HKD',
-    id: 5,
-  },
-  {
-    name: 'CAD',
-    id: 6,
-  },
-];
-
-const CalBoard = ({ selectList }) => {
+const CalBoard = ({ selectList, handleCountry, money }) => {
   const date = new Date();
 
   const years = date.getFullYear();
@@ -35,7 +9,46 @@ const CalBoard = ({ selectList }) => {
   const days = date.getDate();
   const startDate = years + '-' + month + '-' + days;
 
-  return <div>기준일:{startDate}</div>;
+  return (
+    <>
+      <BoardHeader>
+        {selectList.map((item) => {
+          return (
+            <BoardList key={item} onClick={() => handleCountry(item)}>
+              <ListSpan>{item}</ListSpan>
+            </BoardList>
+          );
+        })}
+      </BoardHeader>
+
+      <div>기준일:{startDate}</div>
+      <div>
+        {money.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+        })}
+      </div>
+    </>
+  );
 };
 
 export default CalBoard;
+
+const BoardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const BoardList = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid black;
+  width: 100%;
+  height: 30px;
+`;
+
+const ListSpan = styled.span`
+  font-size: 20px;
+  font-weight: 600;
+`;
