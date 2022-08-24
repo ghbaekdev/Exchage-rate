@@ -8,6 +8,7 @@ const ExchangeCalculator = ({ exchange }) => {
   const [inputValue, setInputValue] = useState();
   const [selected, setSelected] = useState('KRW');
   const [money, setMoney] = useState();
+  const [board, setBoard] = useState();
 
   const handleInput = (e) => {
     const { value } = e.target;
@@ -29,6 +30,7 @@ const ExchangeCalculator = ({ exchange }) => {
   });
 
   const handleCountry = (item) => {
+    setBoard(item);
     const inValue = parseInt(inputValue.split(',').join(''));
     if (selected === 'USD') {
       setMoney(inValue * exchange.quotes[`USD${item}`]);
@@ -40,12 +42,8 @@ const ExchangeCalculator = ({ exchange }) => {
           (exchange.quotes[`USD${selected}`] / exchange.quotes[`USD${item}`])
       );
     }
-    console.log(
-      exchange.quotes[`USD${selected}`],
-      exchange.quotes[`USD${item}`]
-    );
   };
-  console.log('main ', money);
+
   return (
     <CalculatorWrap>
       <Headers>
@@ -68,6 +66,7 @@ const ExchangeCalculator = ({ exchange }) => {
           selectList={selectList.filter((item) => item !== selected)}
           handleCountry={handleCountry}
           money={money}
+          board={board}
         />
       </CalculatorBoard>
     </CalculatorWrap>

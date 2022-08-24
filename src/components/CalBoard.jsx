@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const CalBoard = ({ selectList, handleCountry, money }) => {
+const CalBoard = ({ selectList, handleCountry, money, board }) => {
   const date = new Date();
 
   const years = date.getFullYear();
@@ -20,13 +20,13 @@ const CalBoard = ({ selectList, handleCountry, money }) => {
           );
         })}
       </BoardHeader>
-
-      <div>기준일:{startDate}</div>
-      <div>
-        {money.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-        })}
-      </div>
+      <BoardWrap>
+        <BoardMoney>
+          {board && <span>{board}</span>}
+          {money && <span>{money.toFixed(2)}</span>}
+        </BoardMoney>
+        <BoardDate>기준일:{startDate}</BoardDate>
+      </BoardWrap>
     </>
   );
 };
@@ -51,4 +51,26 @@ const BoardList = styled.div`
 const ListSpan = styled.span`
   font-size: 20px;
   font-weight: 600;
+`;
+
+const BoardWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 350px;
+`;
+
+const BoardDate = styled.div`
+  font-size: 18px;
+  font-weight: 500;
+`;
+
+const BoardMoney = styled.div`
+  display: flex;
+  justify-content: space-around;
+  font-size: 18px;
+  font-weight: 600;
+  width: 150px;
 `;
